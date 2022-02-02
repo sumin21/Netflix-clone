@@ -1,9 +1,18 @@
+import Banner from "./Banner";
+import Nav from "./Nav";
 import Row from "./Row";
 import requests from "../api/requests";
+import styled from "styled-components";
+
+const AppCss = styled.div`
+  background-color: #111;
+`;
 
 const Home = () => {
   return (
-    <div>
+    <AppCss>
+      <Nav />
+      <Banner />
       <Row
         title="NETFLIX ORIGINALS"
         fetchUrl={requests.fetchNetflixOriginals}
@@ -16,7 +25,7 @@ const Home = () => {
       <Row title="Horror Movies" fetchUrl={requests.fetchHorrorMovies} />
       <Row title="Romance Movies" fetchUrl={requests.fetchRomanceMovies} />
       <Row title="Documentaries" fetchUrl={requests.fetchDocumentaries} />
-    </div>
+    </AppCss>
   );
 };
 export default Home;

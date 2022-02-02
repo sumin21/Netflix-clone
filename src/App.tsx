@@ -1,4 +1,4 @@
-import Router from "./Router";
+import Home from "./routes/Home";
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
@@ -19,21 +19,18 @@ time, mark, audio, video {
   margin: 0;
   padding: 0;
   border: 0;
-  font-size: 100%;
-  font: inherit;
   vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
 * {
   margin: 0;
-  background-color: black;
 }
 `;
 const App: React.FC = () => {
   return (
     <>
       <GlobalStyle />
-      <Router />
+      <Home />
     </>
   );
 };
