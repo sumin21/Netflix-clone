@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 
+import YouTube from "react-youtube";
 import axios from "../api/axios";
+import movieTrailer from "movie-trailer";
 import styled from "styled-components";
 
 const base_url = "https://image.tmdb.org/t/p/original/";
@@ -64,6 +66,8 @@ interface Movies {
 
 const Row = ({ title, fetchUrl, isLargeRow }: MoviesProps) => {
   const [movies, setMovies]: [movies: any, setMovies: any] = useState([]);
+  const [trailerUrl, setTrailerUrl]: [trailerUrl: any, setTrailerUrl: any] =
+    useState("");
 
   // A snippet of code which runs based on a specific condition/varaible
   useEffect(() => {
@@ -80,6 +84,32 @@ const Row = ({ title, fetchUrl, isLargeRow }: MoviesProps) => {
       });
   }, [fetchUrl]);
   // [fetchUrl]은 useEffect에게 block 밖에 있는 variable를 쓰고있다고 알려주는것
+
+  const opts = {
+    height: "390",
+    width: "100%",
+    playerVars: {
+      // https://developers.google.com/youtube/player_parameters
+      autoplay: 1,
+    },
+  };
+
+  const handleClick = (movie: any) => {
+    if (trailerUrl) {
+      setTrailerUrl("");
+    } else {
+      movieTrailer(movie?.name || "")
+        .then((url: any) => {
+          // https://www.youtube.com/watch?v=XtMThy8QKqU
+          // ?뒤에 부분 pass해서 어떻게 한다는 듯. XtMThy8QKqU 이 부분은 video ID
+          // https://www.youtube.com/watch?v=XtMThy8QKqU&banana=5
+          // urlParams.get('banana'); 하면 5라는 value를 줌. 고로 'v' 하면 video ID 부분 반환
+          const urlParams = new URLSearchParams(new URL(url).search);
+          setTrailerUrl(urlParams.get("v"));
+        })
+        .catch((error: any) => console.log(error)); //맞는 영상 없으면 error 송출
+    }
+  };
 
   return (
     <RowMargin>
