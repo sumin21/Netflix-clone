@@ -65,9 +65,12 @@ interface Movies {
 }
 
 const Row = ({ title, fetchUrl, isLargeRow }: MoviesProps) => {
-  const [movies, setMovies]: [movies: any, setMovies: any] = useState([]);
-  const [trailerUrl, setTrailerUrl]: [trailerUrl: any, setTrailerUrl: any] =
-    useState("");
+  const [movies, setMovies]: [movies: any, setMovies: (x: any) => void] =
+    useState([]);
+  const [trailerUrl, setTrailerUrl]: [
+    trailerUrl: any,
+    setTrailerUrl: (x: any) => void
+  ] = useState("");
 
   // A snippet of code which runs based on a specific condition/varaible
   useEffect(() => {
@@ -85,7 +88,7 @@ const Row = ({ title, fetchUrl, isLargeRow }: MoviesProps) => {
   }, [fetchUrl]);
   // [fetchUrl]은 useEffect에게 block 밖에 있는 variable를 쓰고있다고 알려주는것
 
-  const opts = {
+  const opts: object = {
     height: "390",
     width: "100%",
     playerVars: {
@@ -94,17 +97,14 @@ const Row = ({ title, fetchUrl, isLargeRow }: MoviesProps) => {
     },
   };
 
-  const handleClick = (movie: any) => {
+  const handleClick = (movie: Movies) => {
     if (trailerUrl) {
       setTrailerUrl("");
     } else {
       movieTrailer(movie?.name || "")
         .then((url: any) => {
-          // https://www.youtube.com/watch?v=XtMThy8QKqU
-          // ?뒤에 부분 pass해서 어떻게 한다는 듯. XtMThy8QKqU 이 부분은 video ID
-          // https://www.youtube.com/watch?v=XtMThy8QKqU&banana=5
-          // urlParams.get('banana'); 하면 5라는 value를 줌. 고로 'v' 하면 video ID 부분 반환
-          const urlParams = new URLSearchParams(new URL(url).search);
+          // console.log(url, new URL(url).search);
+          const urlParams: any = new URLSearchParams(new URL(url).search);
           setTrailerUrl(urlParams.get("v"));
         })
         .catch((error: any) => console.log(error)); //맞는 영상 없으면 error 송출
@@ -120,6 +120,7 @@ const Row = ({ title, fetchUrl, isLargeRow }: MoviesProps) => {
           <RowPoster
             active={isLargeRow}
             key={movie.id}
+            onClick={() => handleClick(movie)}
             src={`${base_url}${
               isLargeRow ? movie.poster_path : movie.backdrop_path
             }`}
@@ -127,6 +128,7 @@ const Row = ({ title, fetchUrl, isLargeRow }: MoviesProps) => {
           />
         ))}
       </RowPosters>
+      {trailerUrl && <YouTube videoId={trailerUrl} opts={opts} />}
     </RowMargin>
   );
 };
