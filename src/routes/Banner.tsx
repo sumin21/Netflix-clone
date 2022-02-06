@@ -68,24 +68,26 @@ const Banner = () => {
   //async 차이?
   //movies 중에 하나 랜덤 뽑기
   useEffect(() => {
-    async function fetchData() {
-      const request: any = await axios.get(requests.fetchNetflixOriginals);
-      let randomMovie =
-        request.data.results[
-          Math.floor(Math.random() * request.data.results.length - 1)
-        ];
-      // while (randomMovie!) {
-      //   randomMovie =
-      //     request.data.results[
-      //       Math.floor(Math.random() * request.data.results.length - 1)
-      //     ];
-      // }
-      console.log("banner성공");
-      setMovie(randomMovie);
-
-      return request;
-    }
-    fetchData();
+    axios
+      .get(requests.fetchNetflixOriginals)
+      .then(function (response) {
+        let randomMovie =
+          response.data.results[
+            Math.floor(Math.random() * response.data.results.length - 1)
+          ];
+        // while (randomMovie!) {
+        //   randomMovie =
+        //     request.data.results[
+        //       Math.floor(Math.random() * request.data.results.length - 1)
+        //     ];
+        // }
+        setMovie(randomMovie);
+        console.log("banner성공");
+        return response;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }, []);
 
   console.log(movie);
