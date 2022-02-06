@@ -35,7 +35,7 @@ const Nav = () => {
   const [show, handleShow]: [show: boolean, handleShow: (x: any) => void] =
     useState(false);
 
-  // 스크롤 감지
+  // 스크롤 이벤트
   useEffect(() => {
     window.addEventListener("scroll", (): void => {
       if (window.scrollY > 100) {

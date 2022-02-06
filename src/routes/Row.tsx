@@ -65,49 +65,48 @@ interface Movies {
 }
 
 const Row = ({ title, fetchUrl, isLargeRow }: MoviesProps) => {
-  const [movies, setMovies]: [movies: any, setMovies: (x: any) => void] =
+  const [movies, setMovies]: [movies: Movies[], setMovies: (x: any) => void] =
     useState([]);
+
   const [trailerUrl, setTrailerUrl]: [
-    trailerUrl: any,
+    trailerUrl: string,
     setTrailerUrl: (x: any) => void
   ] = useState("");
 
-  // A snippet of code which runs based on a specific condition/varaible
   useEffect(() => {
-    // if [], run once when the row loads, and dont run again
-
     axios
       .get(fetchUrl)
       .then(function (response) {
         setMovies(response.data.results);
         console.log("성공");
+        console.log(response.data.results);
       })
       .catch(function (error) {
-        console.log("실패");
+        console.log(error);
       });
   }, [fetchUrl]);
-  // [fetchUrl]은 useEffect에게 block 밖에 있는 variable를 쓰고있다고 알려주는것
+  // fetchUrl 바뀔 때만 effect를 재실행.
 
   const opts: object = {
     height: "390",
     width: "100%",
     playerVars: {
-      // https://developers.google.com/youtube/player_parameters
       autoplay: 1,
     },
   };
 
   const handleClick = (movie: Movies) => {
+    console.log("click");
     if (trailerUrl) {
       setTrailerUrl("");
     } else {
-      movieTrailer(movie?.name || "")
+      movieTrailer(movie?.name || movie?.title || "") //
         .then((url: any) => {
           // console.log(url, new URL(url).search);
           const urlParams: any = new URLSearchParams(new URL(url).search);
           setTrailerUrl(urlParams.get("v"));
         })
-        .catch((error: any) => console.log(error)); //맞는 영상 없으면 error 송출
+        .catch((error: any) => console.log(error)); //맞는 영상 없으면 error
     }
   };
 

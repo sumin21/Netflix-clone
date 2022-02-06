@@ -66,6 +66,7 @@ const Banner = () => {
     useState();
 
   //async 차이?
+  //movies 중에 하나 랜덤 뽑기
   useEffect(() => {
     async function fetchData() {
       const request: any = await axios.get(requests.fetchNetflixOriginals);
@@ -73,15 +74,14 @@ const Banner = () => {
         request.data.results[
           Math.floor(Math.random() * request.data.results.length - 1)
         ];
-      if (randomMovie!) {
-        randomMovie =
-          request.data.results[
-            Math.floor(Math.random() * request.data.results.length - 1)
-          ];
-      }
+      // while (randomMovie!) {
+      //   randomMovie =
+      //     request.data.results[
+      //       Math.floor(Math.random() * request.data.results.length - 1)
+      //     ];
+      // }
+      console.log("banner성공");
       setMovie(randomMovie);
-      //[movie 1, movie2 ,movie3 ,,,] 중에 random으로 하나 뽑기
-      // -1 은 아마 array개수 안 넘어가게 하려고?
 
       return request;
     }
@@ -90,15 +90,11 @@ const Banner = () => {
 
   console.log(movie);
 
+  // 설명 길면 말줄임표
   const truncate = (str: string, n: number) => {
     return str?.length > n ? str.substr(0, n - 1) + "..." : str;
   };
-  //description이 길어졌을 때 말줄임표(...) 생성
 
-  /*
-    header를 따로 banner로 설정한 이유는 banner의 이미지와 banner의 콘텐츠(내용)에 
-    다른 효과를 주기 위함. (서로 영향을 끼치지 않게 하기 위해) 
-    */
   return (
     <BannerCss
       style={{
@@ -118,10 +114,7 @@ const Banner = () => {
           <BannerButton>My List</BannerButton>
         </div>
 
-        <BannerDescription>
-          {truncate(movie?.overview, 150)}
-          {/* 위에서 설정한 truncate 함수 사용 */}
-        </BannerDescription>
+        <BannerDescription>{truncate(movie?.overview, 150)}</BannerDescription>
       </BannerContents>
 
       <BannerFadeBotton />
